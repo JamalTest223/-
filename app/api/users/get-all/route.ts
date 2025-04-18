@@ -4,7 +4,7 @@ import { requireAdminAuth } from "@/src/interfaces/middlewares/adminAuthMiddlewa
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = requireAdminAuth(
-  async (req: AuthenticatedRequest, res: NextResponse) => {
+  async (req: AuthenticatedRequest,  ) => {
     try {
       const searchParams = req.nextUrl.searchParams;
       const limit = Number(searchParams.get("limit")) || 5;

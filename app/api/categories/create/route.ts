@@ -4,7 +4,7 @@ import { requireAdminAuth } from "@/src/interfaces/middlewares/adminAuthMiddlewa
 import { NextResponse } from "next/server";
 
 export const POST = requireAdminAuth(
-  async (authReq: AuthenticatedRequest, res: NextResponse) => {
+  async (authReq: AuthenticatedRequest) => {
     try {
       // Get Form Data
       const formData = await authReq.formData();

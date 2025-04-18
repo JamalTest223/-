@@ -2,7 +2,7 @@ import { resetPasswordController } from "@/src/interfaces/controllers/auth/reset
 import { ResetPasswordInputType } from "@/src/interfaces/validators/auth/resetPasswordValidator";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (req: NextRequest, res: NextResponse) => {
+export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const { token, newPassword } = body as ResetPasswordInputType;

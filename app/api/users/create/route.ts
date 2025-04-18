@@ -6,7 +6,7 @@ import { requireAuth } from "@/src/interfaces/middlewares/authMiddleware";
 import { NextResponse } from "next/server";
 
 export const POST = requireAdminAuth(
-  async (req: AuthenticatedRequest, res: NextResponse) => {
+  async (req: AuthenticatedRequest,  ) => {
     try {
       const body = (await req.json()) as CreateUserDto;
 

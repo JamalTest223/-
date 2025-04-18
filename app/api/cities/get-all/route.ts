@@ -3,7 +3,7 @@ import { getCitiesController } from "@/src/interfaces/controllers/city/getCities
 import { requireAdminAuth } from "@/src/interfaces/middlewares/adminAuthMiddleware";
 import { NextResponse } from "next/server";
 
-export const GET = async (req: AuthenticatedRequest, res: NextResponse) => {
+export const GET = async (req: AuthenticatedRequest) => {
   try {
     const cities = await getCitiesController();
 

@@ -4,7 +4,7 @@ import { requireAuth } from "@/src/interfaces/middlewares/authMiddleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 export const GET = requireAuth(
-  async (req: AuthenticatedRequest, res: NextResponse) => {
+  async (req: AuthenticatedRequest) => {
     try {
        if (!req?.user)
         return NextResponse.json(

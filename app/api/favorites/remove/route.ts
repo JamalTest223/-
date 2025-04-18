@@ -4,7 +4,7 @@ import { requireAuth } from "@/src/interfaces/middlewares/authMiddleware";
 import { NextResponse } from "next/server";
 
 export const DELETE = requireAuth(
-  async (req: AuthenticatedRequest, res: NextResponse) => {
+  async (req: AuthenticatedRequest) => {
     try {
       const { userId, podcastId } = await req.json();
       const controller = await removeFromFavoriteController(userId, podcastId);
