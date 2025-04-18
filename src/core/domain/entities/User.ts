@@ -1,8 +1,6 @@
 import { comparePassword } from "@/src/infrastructure/services/passwordService";
 import { Role } from "../enums/Role";
-import { Blog } from "./Blog";
-import { City } from "./City";
-import { Review } from "./Review";
+
 import { UserPayload } from "../services/jwtServiceInterface";
 export class User {
   constructor(

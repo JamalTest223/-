@@ -1,6 +1,4 @@
-import { Podcast } from "./Podcast";
-import { User } from "./User";
-
+ 
 export class Review {
   constructor(
     public id: string,

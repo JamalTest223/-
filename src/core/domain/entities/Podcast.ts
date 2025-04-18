@@ -1,6 +1,4 @@
 import { Category } from "@prisma/client";
-import { Review } from "./Review";
-import { Favorite } from "./Favorite";
 
 export class Podcast {
   constructor(
