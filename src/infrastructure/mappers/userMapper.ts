@@ -1,6 +1,6 @@
 import { User } from "@/src/core/domain/entities/User";
 import { Role } from "@/src/core/domain/enums/Role";
-import { User as PrismaUser } from "@prisma/client";
+import { User as PrismaUser } from "@/prisma/generated/prisma";
 
 export function mapPrismaUserToUser(prismaUser: Partial<PrismaUser>) {
   return new User(
