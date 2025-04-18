@@ -2,17 +2,27 @@ import {
   AuthenticatedRequest,
   JWTVerifyResult,
 } from "@/src/core/domain/services/jwtServiceInterface";
-import { ApiHandler } from "@/src/core/domain/types/authenticatedRequest";
 import { authRepository } from "@/src/infrastructure/repositories/authRepository";
 import { userRepository } from "@/src/infrastructure/repositories/userRepository";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export function requireAdminAuth(handler: ApiHandler): ApiHandler {
-  return async (req: AuthenticatedRequest, res: NextResponse) => {
+// New type for App Router handlers
+type RouteHandler = (
+  req: NextRequest,
+  context: { params: Record<string, string | string[]> }
+) => Promise<NextResponse>;
+
+// Middleware wrapper for admin authentication
+export function requireAdminAuth(
+  handler: (req: AuthenticatedRequest) => Promise<NextResponse>
+): RouteHandler {
+  return async (
+    req: NextRequest,
+    context: { params: Record<string, string | string[]> }
+  ) => {
     try {
       const authHeader = req.headers.get("Authorization");
 
- 
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return NextResponse.json(
           { success: false, message: "User Not Authenticated" },
@@ -24,7 +34,7 @@ export function requireAdminAuth(handler: ApiHandler): ApiHandler {
       const { valid, expired, decoded } = authRepository.verifyAuthToken(
         token
       ) as JWTVerifyResult;
-      
+
       if (!valid || !decoded) {
         return NextResponse.json(
           {
@@ -43,10 +53,12 @@ export function requireAdminAuth(handler: ApiHandler): ApiHandler {
         );
       }
 
-      // Attach user to request
-      req.user = decoded;
+      // Create authenticated request
+      const authenticatedReq = req as AuthenticatedRequest;
+      authenticatedReq.user = decoded;
 
-      return await handler(req, res);
+      // Call the original handler with the authenticated request
+      return await handler(authenticatedReq);
     } catch (e: any) {
       console.log("Error in adminAuthMiddleware:", e);
       return NextResponse.json(
