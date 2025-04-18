@@ -3,7 +3,7 @@ import { getAllUserFavoritesController } from "@/src/interfaces/controllers/favo
 import { requireAuth } from "@/src/interfaces/middlewares/authMiddleware";
 import { NextRequest, NextResponse } from "next/server";
 
-export const getAllUserFavorites = async (
+export const GET = async (
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) => {
@@ -23,7 +23,7 @@ export const getAllUserFavorites = async (
           { status: e.statusCode || 500 }
         );
       }
-    })(req as AuthenticatedRequest, NextResponse.next());
+    })(req as AuthenticatedRequest);
   } catch (e: any) {
     return NextResponse.json(
       { message: e.message, success: false },

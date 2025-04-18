@@ -25,7 +25,7 @@ export const DELETE = async (
         { status: e.statusCode || 500 }
       );
     }
-  })(req as AuthenticatedRequest, NextResponse.next());
+  })(req as AuthenticatedRequest );
 };
 export const GET = async (
   req: NextRequest,
@@ -68,5 +68,5 @@ export const PUT = async (
         { status: e.statusCode || 500 }
       );
     }
-  })(req as AuthenticatedRequest, NextResponse.next());
+  })(req as AuthenticatedRequest );
 };

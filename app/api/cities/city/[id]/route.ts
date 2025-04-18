@@ -27,7 +27,7 @@ export const GET = async (
           { status: e.statusCode || 500 }
         );
       }
-    })(req as AuthenticatedRequest, NextResponse.next());
+    })(req as AuthenticatedRequest );
   } catch (e: any) {
     return NextResponse.json(
       { message: e.message, success: false },
@@ -59,7 +59,7 @@ export const PUT = async (
           { status: e.statusCode || 500 }
         );
       }
-    })(req as AuthenticatedRequest, NextResponse.next());
+    })(req as AuthenticatedRequest, );
   } catch (e: any) {
     return NextResponse.json(
       { message: e.message, success: false },
@@ -87,5 +87,5 @@ export const DELETE = async (
         { status: e.statusCode || 500 }
       );
     }
-  })(req as AuthenticatedRequest, NextResponse.next());
+  })(req as AuthenticatedRequest );
 };

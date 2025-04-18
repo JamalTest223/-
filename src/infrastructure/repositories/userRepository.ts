@@ -3,8 +3,7 @@ import bcrypt from "bcryptjs";
 import { userAgent } from "next/server";
 import prisma from "../database/prisma";
 import { mapPrismaUserToUser } from "../mappers/userMapper";
-import { User as PrismaUser } from "@/app/generated/prisma";
-export const userRepository: IUserRepository = {
+ export const userRepository: IUserRepository = {
   create: async (userData) => {
     try {
       const user = await prisma.user.create({ data: userData });
