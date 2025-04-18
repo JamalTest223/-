@@ -5,22 +5,13 @@ import {
 import { authRepository } from "@/src/infrastructure/repositories/authRepository";
 import { NextRequest, NextResponse } from "next/server";
 
-// New type for App Router handlers
-type RouteHandler = (
-  req: NextRequest,
-  context: { params: Record<string, string | string[]> }
-) => Promise<NextResponse>;
-
-// Middleware wrapper for authentication
+// This middleware function conforms to Next.js App Router requirements
 export function requireAuth(
   handler: (req: AuthenticatedRequest) => Promise<NextResponse>
-): RouteHandler {
-  return async (
-    req: NextRequest,
-    context: { params: Record<string, string | string[]> }
-  ) => {
+) {
+  return async function (request: NextRequest) {
     try {
-      const authHeader = req.headers.get("Authorization");
+      const authHeader = request.headers.get("Authorization");
 
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return NextResponse.json(
@@ -45,7 +36,7 @@ export function requireAuth(
       }
 
       // Create authenticated request
-      const authenticatedReq = req as AuthenticatedRequest;
+      const authenticatedReq = request as AuthenticatedRequest;
       authenticatedReq.user = decoded;
 
       // Call the original handler with the authenticated request
