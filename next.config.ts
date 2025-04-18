@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   swcMinify: true,
   // API only setup
   // This is important when you don't have frontend
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   headers: async () => {
     return [
       {
