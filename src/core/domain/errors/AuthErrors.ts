@@ -12,7 +12,7 @@ export class UnauthenticatedError extends BaseError {
   }
 }
 export class UnauthorizedError extends BaseError {
-  constructor(message: string, options?: ErrorOptions) {
+  constructor(message: string="User Not Authorized", options?: ErrorOptions) {
     super("Unauthorized User", message, 403, options);
   }
 }
@@ -23,7 +23,7 @@ export class NotFoundUser extends NotFoundError {
 }
 
 export class AlreadyExistsError extends BaseError {
-  constructor(message: string, options?: ErrorOptions) {
+  constructor(message: string="This user already exists", options?: ErrorOptions) {
     super("User Already Exists", message, 400, options);
   }
 }

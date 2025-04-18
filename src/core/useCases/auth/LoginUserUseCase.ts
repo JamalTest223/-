@@ -10,17 +10,17 @@ import { User } from "../../domain/entities/User";
 import { BaseError } from "../../domain/errors/commonErrors";
 import { userRepository } from "@/src/infrastructure/repositories/userRepository";
 import { authRepository } from "@/src/infrastructure/repositories/authRepository";
+import { LoginUserInput } from "../../dtos/auth/loginUserInput";
 
-export const loginUserUseCase = async (
-  email: string,
-  password: string
-): Promise<{ token: string; user: User }> => {
+export const loginUserUseCase = async ({
+  email,
+  password,
+}: LoginUserInput): Promise<{ token: string; user: User }> => {
   try {
     const user = await userRepository.findByEmail(email);
     if (!user) {
       throw new NotFoundUser();
     }
-    console.log(user,'omprsefd')
     const checkPassword = await user.verifyPassword(password);
     if (!checkPassword) {
       throw new InvalidCredentialsError();

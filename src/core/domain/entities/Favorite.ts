@@ -6,8 +6,8 @@ export class Favorite {
     public id: string,
     public user_id: string,
     public podcast_id: string,
-    public User: User,
     public created_at: Date,
-    public Podcast: Podcast
+    public User?: User,
+    public Podcast?: Podcast
   ) {}
 }

@@ -2,6 +2,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  // output   = "generated/prisma"
 }
 
 datasource db {
@@ -23,11 +24,10 @@ model User {
   id               String     @id @default(auto()) @map("_id") @db.ObjectId
   email            String     @unique
   password         String
-  resetToken       String?   
+  resetToken       String?
   resetTokenExpiry DateTime?
   date_of_birth    DateTime?
   name             String
-  gender           String?
   imageUrl         String?
   bio              String?
   city_id          String?    @db.ObjectId
@@ -53,11 +53,13 @@ enum Role {
 
 // Categories Table
 model Category {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  name     String    @unique
-  imageUrl String?
-  podcasts Podcast[]
-  Blog     Blog[]
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String    @unique
+  imageUrl   String?
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+  podcasts   Podcast[]
+  blogs      Blog[]
 
   @@map("categories")
 }
@@ -73,7 +75,7 @@ model Blog {
   category_id String   @db.ObjectId
   user_id     String   @db.ObjectId
   category    Category @relation(fields: [category_id], references: [id])
-  user        User     @relation(fields: [user_id], references: [id])
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade) // This will delete the blog when the user is deleted
 
   comment Comment[]
 
@@ -136,8 +138,9 @@ model Favorite {
   user_id    String   @db.ObjectId
   podcast_id String   @db.ObjectId
   created_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id])
-  podcast    Podcast  @relation(fields: [podcast_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  podcast    Podcast  @relation(fields: [podcast_id], references: [id], onDelete: Cascade)
+  updated_at DateTime @updatedAt
 
   @@unique([user_id, podcast_id])
   @@map("favorites")

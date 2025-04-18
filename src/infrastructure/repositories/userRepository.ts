@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { userAgent } from "next/server";
 import prisma from "../database/prisma";
 import { mapPrismaUserToUser } from "../mappers/userMapper";
+import { User as PrismaUser } from "@/app/generated/prisma";
 export const userRepository: IUserRepository = {
   create: async (userData) => {
     try {
@@ -64,18 +65,65 @@ export const userRepository: IUserRepository = {
   },
   delete: async (id) => {
     try {
-      const user = await prisma.user.delete({ where: { id } });
-      return mapPrismaUserToUser(user);
+      return await prisma.$transaction(async (tx: any) => {
+        // حذف التعليقات أولاً
+        await tx.comment.deleteMany({
+          where: { user_id: id },
+        });
+
+        // حذف المراجعات
+        await tx.review.deleteMany({
+          where: { user_id: id },
+        });
+
+        // حذف المفضلات
+        await tx.favorite.deleteMany({
+          where: { user_id: id },
+        });
+
+        // حذف المدونات
+        await tx.blog.deleteMany({
+          where: { user_id: id },
+        });
+
+        // حذف المستخدم
+        await tx.user.delete({
+          where: { id },
+        });
+
+        return true;
+      });
     } catch (e) {
       console.error(e);
-      return null;
+      return false;
     }
   },
   update: async (id, data) => {
     try {
       const prismaUser = await prisma.user.update({
         where: { id },
-        data: { ...data },
+        data: {
+          ...(data.name && { name: data.name }),
+          ...(data.email && { email: data.email }),
+
+          ...(data.role && { role: data.role }),
+          ...(data.city_id && { city_id: data.city_id }),
+          ...(data.date_of_birth && { date_of_birth: data.date_of_birth }),
+          ...(data.bio && { bio: data.bio }),
+          ...(data.imageUrl && { imageUrl: data.imageUrl }),
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          city_id: true,
+          date_of_birth: true,
+          bio: true,
+          imageUrl: true,
+          created_at: true,
+          updated_at: true,
+        },
       });
 
       return mapPrismaUserToUser(prismaUser);
@@ -83,6 +131,51 @@ export const userRepository: IUserRepository = {
       console.error(e);
       return null;
     }
+  },
+  getUsers: async (limit, page, search) => {
+    const where = search
+      ? {
+          OR: [{ name: { contains: search } }, { email: { contains: search } }],
+        }
+      : {};
+    const [totalUsers, users] = await Promise.all([
+      prisma.user.count({ where: where ? where : {} }), // عدد المستخدمين (للحساب الكلي)
+      prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          city_id: true,
+          date_of_birth: true,
+          bio: true,
+          imageUrl: true,
+          created_at: true,
+          updated_at: true,
+        },
+        take: limit,
+        skip: (page - 1) * limit,
+        ...(search && {
+          where: {
+            OR: [
+              { name: { contains: search } },
+              { email: { contains: search } },
+            ],
+          },
+        }),
+      }),
+    ]);
+    return {
+      data: users.map((user) => mapPrismaUserToUser(user)),
+      pagination: {
+        total: totalUsers,
+        hasMore: page * limit < totalUsers,
+        hasPrevious: page > 1,
+        currentPage: page,
+        limit: limit,
+        pages: Math.ceil(totalUsers / limit),
+      },
+    };
   },
 
   findByResetToken: async (token) => {

@@ -1,11 +1,11 @@
+import { LoginUserInput } from "@/src/core/dtos/auth/loginUserInput";
 import { loginController } from "@/src/interfaces/controllers/auth/loginController";
-import { LoginRequestBody } from "@/types/user.type";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json()) as LoginRequestBody;
+    const body = (await req.json()) as LoginUserInput;
     const { email, password } = body;
 
     const controller = await loginController({ email, password });

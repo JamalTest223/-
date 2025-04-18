@@ -5,5 +5,5 @@ import { User } from "../entities/User";
 
 export type ApiHandler = (
   req: AuthenticatedRequest,
-  res: NextResponse
-) => Promise<NextResponse | User>;
+  res: NextResponse,
+ ) => Promise<NextResponse>;

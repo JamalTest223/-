@@ -6,16 +6,21 @@ import {
 import { BaseError } from "../../domain/errors/commonErrors";
 import { authRepository } from "@/src/infrastructure/repositories/authRepository";
 import { User } from "../../domain/entities/User";
+import { cityRepository } from "@/src/infrastructure/repositories/cityRepository";
+import { GetMeResult } from "../../dtos/user/UserDto";
 
-export const getMeUseCase = async (id: string): Promise<User> => {
+export const getMeUseCase = async (id: string): Promise<GetMeResult> => {
   try {
     const user = await userRepository.findById(id);
     if (!user) {
       throw new NotFoundUser();
     }
-    return user;
+    const userCity =
+      user.city_id &&
+      typeof user.city_id === "string" &&
+      (await cityRepository.findCity(user.city_id));
+    return { ...user, city: userCity ? userCity.name : "" };
   } catch (e: any) {
-    console.log(e);
     throw new BaseError(e.name, e.message, 400);
   }
 };

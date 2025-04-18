@@ -2,7 +2,7 @@ import { Favorite } from "../entities/Favorite";
 
 export interface IFavoriteRepository {
   create: (userId: string, podcastId: string) => Promise<Favorite>;
-  delete: (userId: string, podcastId: string) => Promise<Boolean | null>;
+  delete: (userId: string, podcastId: string) => Promise<boolean>;
   findByUserIdAndPodcastId: (
     userId: string,
     podcastId: string

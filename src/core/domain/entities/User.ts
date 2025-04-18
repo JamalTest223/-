@@ -1,6 +1,6 @@
 import { comparePassword } from "@/src/infrastructure/services/passwordService";
 import { Role } from "../enums/Role";
- import { Blog } from "./Blog";
+import { Blog } from "./Blog";
 import { City } from "./City";
 import { Review } from "./Review";
 import { UserPayload } from "../services/jwtServiceInterface";
@@ -11,13 +11,13 @@ export class User {
     public email: string,
     public role: Role,
     private password?: string,
+    public date_of_birth?: Date,
     private resetToken?: string,
     private resetTokenExpiry?: Date,
     public imageUrl?: string,
     public bio?: string,
     public city_id?: string,
     public created_at?: Date,
-
     public updated_at?: Date
   ) {}
 
@@ -30,11 +30,10 @@ export class User {
     return (this.password = newPassword);
   }
 
-
   toPayload(): UserPayload {
     return {
       id: this.id,
-      name:this.name,
+      name: this.name,
       email: this.email,
       role: this.role,
     };

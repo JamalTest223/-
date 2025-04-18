@@ -3,12 +3,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
-import { RegisterRequestBody } from "@/types/user.type";
-import { registerController } from "@/src/interfaces/controllers/auth/registerController";
+ import { registerController } from "@/src/interfaces/controllers/auth/registerController";
+import { RegisterUserInput } from "@/src/core/dtos/auth/registerUserInput";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json()) as RegisterRequestBody;
+    const body = (await req.json()) as RegisterUserInput;
     console.log(body);
     const { email, password, name } = body;
 

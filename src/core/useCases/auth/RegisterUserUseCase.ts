@@ -6,12 +6,13 @@ import { User } from "../../domain/entities/User";
 import { BaseError } from "../../domain/errors/commonErrors";
 import { userRepository } from "@/src/infrastructure/repositories/userRepository";
 import { authRepository } from "@/src/infrastructure/repositories/authRepository";
+import { RegisterUserInput } from "../../dtos/auth/registerUserInput";
 
-export const registerUserUseCase = async (
-  name: string,
-  email: string,
-  password: string
-): Promise<{ token: string; user: User }> => {
+export const registerUserUseCase = async ({
+  name,
+  email,
+  password,
+}: RegisterUserInput): Promise<{ token: string; user: User }> => {
   try {
     if (await userRepository.checkExists(email)) {
       throw new AlreadyExistsError("Email Already Exists");

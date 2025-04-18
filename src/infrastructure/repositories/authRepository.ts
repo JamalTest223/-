@@ -13,7 +13,7 @@ export const authRepository: IAuthRepository = {
   async validate(email: string, password: string) {
     const user = await userRepository.findByEmail(email);
     if (!user) return null;
-
+    
     const checkPassword = await user.verifyPassword(password);
     return checkPassword ? user : null;
   },
@@ -41,7 +41,8 @@ export const authRepository: IAuthRepository = {
 
   async resetPassword(token: string, newPassword: string) {
     const user = await userRepository.findByResetToken(token);
-    if (!user) return null;
+    const expiry = user?.isResetTokenValid(token);
+    if (!user || !expiry) return null;
 
     const hashedPassword = await hashPassword(newPassword);
     user.changePassword(hashedPassword);
@@ -60,7 +61,6 @@ export const authRepository: IAuthRepository = {
 
   verifyAuthToken(token: string) {
     const JWT = verifyJWT(token);
-    console.log(JWT,'jwerfdgb')
     return JWT;
   },
 };

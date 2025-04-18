@@ -1,11 +1,14 @@
 import { getMeUseCase } from "@/src/core/useCases/user/GetMeUseCase";
 import { requireAuth } from "../../middlewares/authMiddleware";
 import { NextResponse } from "next/server";
-import { UnauthenticatedError } from "@/src/core/domain/errors/AuthErrors";
+import {
+  NotFoundUser,
+  UnauthenticatedError,
+} from "@/src/core/domain/errors/AuthErrors";
 
-export const getMeController = requireAuth(async (req, res) => {
-  console.log(req.user, "asdfghjmk");
-  if (!req.user) throw new UnauthenticatedError();
-  const user = await getMeUseCase(req.user.id);
+export const getMeController = async (userId: string) => {
+  if (!userId) throw new UnauthenticatedError();
+  const user = await getMeUseCase(userId);
+  if (!user) throw new NotFoundUser();
   return user;
-});
+};

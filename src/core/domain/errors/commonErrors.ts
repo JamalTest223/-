@@ -23,7 +23,20 @@ export class NotFoundError extends BaseError {
 }
 
 export class InputParseError extends BaseError {
-  constructor(message: string = "Input Parse Error", options?: ErrorOptions) {
-    super("Input Parse Error", message, 400, options);
+  constructor(
+    name: string = "Input Parse Error",
+    message: string = "Input Parse Error",
+    options?: ErrorOptions
+  ) {
+    super(name, message, 400, options);
+  }
+}
+export class UnexpectedError extends BaseError {
+  constructor(
+    name: string = "Unexpected Error",
+    message: string = "Unexpected Error",
+    options?: ErrorOptions
+  ) {
+    super(name, message, 500, options);
   }
 }
