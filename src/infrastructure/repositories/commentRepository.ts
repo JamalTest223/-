@@ -1,5 +1,3 @@
-// src/infrastructure/repositories/commentRepository.ts
-import { PrismaClient } from "@prisma/client";
 import { ICommentRepository } from "../../core/domain/repositories/ICommentRepository";
 import prisma from "../database/prisma";
 

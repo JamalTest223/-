@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { IFavoriteRepository } from "../../core/domain/repositories/IFavoriteRepository";
 import { Favorite } from "../../core/domain/entities/Favorite";
-
-const prisma = new PrismaClient();
+import prisma from "../database/prisma";
 
 export const favoriteRepository: IFavoriteRepository = {
   create: async (userId: string, podcastId: string) => {

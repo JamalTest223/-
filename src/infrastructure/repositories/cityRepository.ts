@@ -1,11 +1,10 @@
 // src/infrastructure/repositories/cityRepository.ts
-import { PrismaClient } from "@prisma/client";
-import { ICityRepository } from "../../core/domain/repositories/ICityRepository";
+ import { ICityRepository } from "../../core/domain/repositories/ICityRepository";
 import { City } from "../../core/domain/entities/City";
 import { UpdateUserDto } from "@/src/core/dtos/user/UpdateUserDto";
 import { CreateCityDto } from "@/src/core/dtos/city/createCityDto";
-
-const prisma = new PrismaClient();
+import prisma from "../database/prisma";
+ 
 
 export const cityRepository: ICityRepository = {
   create: async ({ name }: CreateCityDto): Promise<City | null> => {
